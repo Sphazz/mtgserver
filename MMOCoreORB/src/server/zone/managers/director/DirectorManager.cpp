@@ -431,6 +431,9 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	luaEngine->registerFunction("getSchematicItemName", getSchematicItemName);
 	luaEngine->registerFunction("getBadgeListByType", getBadgeListByType);
 
+	// Custom
+	luaEngine->registerFunction("getAdminLevel", getAdminLevel);
+
 	//Navigation Mesh Management
 	luaEngine->registerFunction("createNavMesh", createNavMesh);
 
@@ -3681,6 +3684,32 @@ int DirectorManager::getBadgeListByType(lua_State* L) {
 			lua_rawseti(L, -2, count);
 		}
 	}
+
+	return 1;
+}
+
+// Custom - Credit TheTinyPebble?
+int DirectorManager::getAdminLevel(lua_State* L) {
+	SceneObject* player = (SceneObject*) lua_touserdata(L, -1);
+
+	if (player == nullptr || !player->isPlayerCreature()) {
+		DirectorManager::instance()->error("Attempted to get admin level of a non-player object.");
+		return 0;
+	}
+
+	Reference<PlayerObject*> ghost = player->getSlottedObject("ghost").castTo<PlayerObject*>();
+
+	if (ghost == nullptr) {
+		DirectorManager::instance()->error("getAdminLevel failed to create ghost as player object.");
+		return 0;
+	}
+
+	int adminLevel = ghost->getAdminLevel();
+
+	if (adminLevel >= 0)
+		lua_pushinteger(L, adminLevel);
+	else
+		lua_pushnil(L);
 
 	return 1;
 }
