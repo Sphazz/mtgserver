@@ -6,7 +6,7 @@
 ]]
 
 eventShuttleNpcScreenplay = ScreenPlay:new {
-	scriptName = "eventShuttleNpcScreenplay",
+	screenplayName = "eventShuttleNpcScreenplay",
 	maxNpcs = 8,
 	windowPrefix = "[Event Shuttle]",
 	timerOptions = {
@@ -26,7 +26,7 @@ registerScreenPlay("eventShuttleNpcScreenplay", false)
 
 function eventShuttleNpcScreenplay:openEventTeleportNPCWindow(pPlayer)
 	local playerID = SceneObject(pPlayer):getObjectID()
-	local sui = SuiListBox.new(self.scriptName, "teleportNpcMainCallback")
+	local sui = SuiListBox.new(self.screenplayName, "teleportNpcMainCallback")
 	sui.setTargetNetworkId(0)
 	sui.setTitle(self.windowPrefix .. " Main Menu")
 	local message = colorGrey .. "Choose an Event Shuttle to" .. colorFail .. " [Setup]" .. colorGrey .. " or " .. colorSuccess .. "[Manage]" .. colorGrey .. ".\n\n"
@@ -36,13 +36,13 @@ function eventShuttleNpcScreenplay:openEventTeleportNPCWindow(pPlayer)
 	for i = 1, self.maxNpcs do
 		local teleportNpcSetup = readData("eventTeleportNpc:Setup:" .. playerID .. ":" .. i)
 		if (teleportNpcSetup > 0) then
-			sui.add("\\#pcontrast1 [Manage]\t " .. colorEmphasis .. "Event Shuttle " .. colorCounter .. "#" .. i, "")
+			sui.add(colorSuccess .. "[Manage]\t " .. colorEmphasis .. "Event Shuttle " .. colorCounter .. "#" .. i, "")
 		else
-			sui.add("\\#pcontrast2 [Setup]\t\t " .. colorEmphasis .. "Event Shuttle " .. colorCounter .. "#" .. i, "")
+			sui.add(colorFail .. "[Setup]\t\t " .. colorEmphasis .. "Event Shuttle " .. colorCounter .. "#" .. i, "")
 		end
 	end
 
-	sui.add("\\#cef46eList Server Wide Event Shuttles", "")
+	sui.add(colorImportant .. "List Server Wide Event Shuttles", "")
 
 	sui.sendTo(pPlayer)
 end
@@ -78,14 +78,14 @@ function eventShuttleNpcScreenplay:teleportNpcMainCallback(pPlayer, pSui, eventI
 	local timer = readData("eventTeleportNpc:" .. playerID .. ":timer:" .. selectedOption)
 	local npcName = readStringData("eventTeleportNpc:" .. playerID .. ":npcName:" .. selectedOption)
 
-	local sui = SuiListBox.new(self.scriptName, "teleportNpcCallback")
+	local sui = SuiListBox.new(self.screenplayName, "teleportNpcCallback")
 	sui.setTargetNetworkId(0)
 	sui.setTitle(self.windowPrefix .. " Event Shuttle #" .. selectedOption)
 	sui.showOtherButton()
 	sui.setOtherButtonText("Back")
 	sui.setProperty("btnRevert", "OnPress", "RevertWasPressed=1\r\nparent.btnOk.press=t")
 
-	local message = "\\#ffffffEvent Shuttle " .. colorCounter .. "#" .. selectedOption .. "\n\n" .. colorSlate .. "Status: "
+	local message = colorWhite .. "Event Shuttle " .. colorCounter .. "#" .. selectedOption .. "\n\n" .. colorSlate .. "Status: "
 	local npcState = 0
 
 	local npcMsg = colorEmphasis .. "Event Shuttle Location"
@@ -189,7 +189,7 @@ function eventShuttleNpcScreenplay:teleportNpcCallback(pPlayer, pSui, eventIndex
 
 	if (selectedOption == 1) then
 		if (pMobile ~= nil) then
-			CreatureObject(pPlayer):sendSystemMessage(colorSysWarning .. "[WARNING] \\#ffffffCannot change Event Shuttle's spawn point. Please use this menu to destroy the Event Shuttle to change the Event Shuttle's location.")
+			CreatureObject(pPlayer):sendSystemMessage(colorSysWarning .. "[WARNING] " .. colorWhite .. "Cannot change Event Shuttle's spawn point. Please use this menu to destroy the Event Shuttle to change the Event Shuttle's location.")
 		else
 			self:writeCurrentLocation(pPlayer, teleportNpcSetup, "npcLocation")
 			writeData("eventTeleportNpc:Setup:" .. playerID .. ":" .. teleportNpcSetup, 1)
@@ -215,7 +215,7 @@ function eventShuttleNpcScreenplay:teleportNpcCallback(pPlayer, pSui, eventIndex
 		if (pMobile ~= nil and setNewDestination == true) then
 			local newDestination = readStringData("eventTeleportNpc:destinationLocation:" .. playerID .. ":" .. teleportNpcSetup)
 			writeStringData("eventTeleportNpc:Destination:" .. CreatureObject(pMobile):getObjectID(), newDestination)
-			CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] \\#ffffffTeleport destination has been updated for Event Shuttle " .. colorCounter .. "#" .. teleportNpcSetup .. "\\#ffffff.")
+			CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] " .. colorWhite .. "Teleport destination has been updated for Event Shuttle " .. colorCounter .. "#" .. teleportNpcSetup .. colorWhite .. ".")
 		end
 
 		self:teleportNpcMainCallback(pPlayer, "", 0, teleportNpcSetup - 1)
@@ -225,7 +225,7 @@ function eventShuttleNpcScreenplay:teleportNpcCallback(pPlayer, pSui, eventIndex
 		end
 
 		if (pMobile ~= nil) then
-			CreatureObject(pPlayer):sendSystemMessage(colorSysWarning .. "[WARNING] \\#ffffffCannot change despawn timer while the Event Shuttle is spawned. Please use this menu to destroy the Event Shuttle to change the timer.")
+			CreatureObject(pPlayer):sendSystemMessage(colorSysWarning .. "[WARNING] " .. colorWhite .. "Cannot change despawn timer while the Event Shuttle is spawned. Please use this menu to destroy the Event Shuttle to change the timer.")
 			self:teleportNpcMainCallback(pPlayer, "", 0, teleportNpcSetup - 1)
 		else
 			self:setTimerWindow(pPlayer, teleportNpcSetup)
@@ -241,7 +241,7 @@ function eventShuttleNpcScreenplay:teleportNpcCallback(pPlayer, pSui, eventIndex
 end
 
 function eventShuttleNpcScreenplay:openRenameNpcWindow(pPlayer)
-	local sui = SuiInputBox.new(self.scriptName, "renameNpcCallback")
+	local sui = SuiInputBox.new(self.screenplayName, "renameNpcCallback")
 	if (pUsingObject == nil) then
 		sui.setTargetNetworkId(0)
 	else
@@ -275,7 +275,7 @@ function eventShuttleNpcScreenplay:renameNpcCallback(pPlayer, pSui, eventIndex, 
 	end
 
 	if (string.len(args) >= self.npcMaxNameLength) then
-		CreatureObject(pPlayer):sendSystemMessage(colorSysWarning .. "[WARNING] \\#ffffffError renaming Event Shuttle, name is too long. (" .. self.npcMaxNameLength .. " max limit)")
+		CreatureObject(pPlayer):sendSystemMessage(colorSysWarning .. "[WARNING] " .. colorWhite .. "Error renaming Event Shuttle, name is too long. (" .. self.npcMaxNameLength .. " max limit)")
 		self:openRenameNpcWindow(pPlayer)
 		return
 	end
@@ -355,7 +355,7 @@ function eventShuttleNpcScreenplay:setTimerWindow(pPlayer, npcIndex)
 
 	local message = "Set the Event Shuttle's despawn timer.\n\nAn Event Shuttle with a despawn timer of \"Never\" will not despawn until server restart or destructed from the Event Shuttle's menu."
 
-	local sui = SuiListBox.new(self.scriptName, "setTimerCallback")
+	local sui = SuiListBox.new(self.screenplayName, "setTimerCallback")
 	sui.setTargetNetworkId(0)
 	sui.setTitle(self.windowPrefix .. " Despawn Timer")
 	sui.setPrompt(message)
@@ -416,12 +416,13 @@ function eventShuttleNpcScreenplay:doNpcSpawnResetDestroyOptions(pPlayer, npcInd
 	if (pMobile ~= nil) then
 		self:destroyTeleportNpc(playerID, pMobile)
 		self:resetTeleportNpc(pPlayer, playerID, npcIndex)
-		CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] \\#ffffffEvent Shuttle " .. colorCounter .. "#" .. npcIndex .. "\\#ffffff Destroyed")
+		CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] " .. colorWhite .. "Event Shuttle " .. colorCounter .. "#" .. npcIndex .. colorWhite .. " Destroyed")
 	elseif (npcLocation ~= nil and destination ~= nil and timer ~= 0) then
 		self:spawnTeleportNpc(pPlayer, playerID, npcIndex)
 	else
 		self:resetTeleportNpc(pPlayer, playerID, npcIndex)
-		CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] \\#ffffffEvent Shuttle " .. colorCounter .. "#" .. npcIndex .. "\\#ffffff Settings Reset")
+		CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] " .. colorWhite .. "Event Shuttle " .. colorCounter .. "#" .. npcIndex .. colorWhite .. " Settings Reset")
+		self:openEventTeleportNPCWindow(pPlayer)
 	end
 end
 
@@ -452,7 +453,7 @@ function eventShuttleNpcScreenplay:spawnTeleportNpc(pPlayer, playerID, npcIndex)
 	end
 
 	if (despawnTimer > 0) then
-		createEvent(despawnTimer * 60 * 1000, self.scriptName, "triggerNpcDespawn", pMobile, "")
+		createEvent(despawnTimer * 60 * 1000, self.screenplayName, "triggerNpcDespawn", pMobile, "")
 	end
 
 	if (npcName ~= "") then
@@ -467,7 +468,7 @@ function eventShuttleNpcScreenplay:spawnTeleportNpc(pPlayer, playerID, npcIndex)
 	writeData("eventTeleportNpc:" .. playerID .. ":npcID:" .. npcIndex, CreatureObject(pMobile):getObjectID())
 	writeData("eventTeleportNpc:" .. playerID .. ":npcIndex:" .. CreatureObject(pMobile):getObjectID(), npcIndex)
 
-	CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] \\#ffffffEvent Shuttle " .. colorCounter .. "#" .. npcIndex .. "\\#ffffff Spawned")
+	CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] " .. colorWhite .. "Event Shuttle " .. colorCounter .. "#" .. npcIndex .. colorWhite .. " Spawned")
 end
 
 function eventShuttleNpcScreenplay:resetTeleportNpc(pPlayer, playerID, npcIndex)
@@ -527,7 +528,7 @@ function eventShuttleNpcScreenplay:getAllTeleportNPCs(pPlayer)
 	local spawnedMobiles = readStringData("eventTeleportNpc:spawnedMobiles")
 
 	if (spawnedMobiles == "") then
-		CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] \\#ffffffThere are currently no Event Shuttles spawned.")
+		CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] " .. colorWhite .. "There are currently no Event Shuttles spawned.")
 		self:openEventTeleportNPCWindow(pPlayer)
 		return
 	end
@@ -538,7 +539,7 @@ function eventShuttleNpcScreenplay:getAllTeleportNPCs(pPlayer)
 		return
 	end
 
-	local msg = colorGrey .. "Below is a list of currently spawned Event Shuttles across all staff members.\n\nSelect the " .. colorEmphasis .. "Delete All" .. colorGrey .. " button to delete them or " .. colorEmphasis .. "Cancel" .. colorGrey .. " to close this window and return to the Event Shuttle selection screen.\n\n\\#ffffff"
+	local msg = colorGrey .. "Below is a list of currently spawned Event Shuttles across all staff members.\n\nSelect the " .. colorEmphasis .. "Delete All" .. colorGrey .. " button to delete them or " .. colorEmphasis .. "Cancel" .. colorGrey .. " to close this window and return to the Event Shuttle selection screen.\n\n" .. colorWhite
 
 	for i, mobileID in ipairs(mobilesTable) do
 		local pMobile = getCreatureObject(mobileID)
@@ -549,9 +550,9 @@ function eventShuttleNpcScreenplay:getAllTeleportNPCs(pPlayer)
 		end
 	end
 
-	local sui = SuiMessageBox.new(self.scriptName, "getAllTeleportNPCsCallback")
+	local sui = SuiMessageBox.new(self.screenplayName, "getAllTeleportNPCsCallback")
 	sui.setTitle(self.windowPrefix .. " Event Shuttle Listing")
-	sui.setPrompt("\\#ffffff" .. msg)
+	sui.setPrompt(colorWhite .. msg)
 	if (pPlayer == nil) then
 		sui.setTargetNetworkId(0)
 	else
@@ -582,11 +583,11 @@ function eventShuttleNpcScreenplay:formatTeleportNpcMessage(pMobile, mobileID)
 	local npcName = SceneObject(pMobile):getDisplayedName()
 	npcName = string.gsub(npcName, "\n", " ")
 
-	local msg = colorCounter .. CreatureObject(pMobileCreator):getFirstName() .. " \\#ffffff- " .. colorEmphasis .. "Event Shuttle " .. colorCounter .. "#" .. npcIndex .. "\n"
-	msg = msg .. "\t" .. colorSlate .. "Event Shuttle Name: \\#ffffff" .. npcName .. "\n"
-	msg = msg .. "\t" .. colorSlate .. "Location: \\#ffffff" .. npcLocation[1] .. ", " .. colorSlate .. "X:\\#ffffff " .. npcLocation[2] .. ", " .. colorSlate .. "Y:\\#ffffff " .. npcLocation[4] .. ", " .. colorSlate .. "Z:\\#ffffff " .. npcLocation[3] .. ", " .. colorSlate .. "Rot:\\#ffffff " .. npcLocation[5] .. ", " .. colorSlate .. "Cell:\\#ffffff " .. npcLocation[6] .. "\n"
-	msg = msg .. "\t" .. colorSlate .. "Destination: \\#ffffff" .. destination[1] .. ", " .. colorSlate .. "X:\\#ffffff " .. destination[2] .. ", " .. colorSlate .. "Y:\\#ffffff " .. destination[4] .. ", " .. colorSlate .. "Z:\\#ffffff " .. destination[3] .. ", " .. colorSlate .. "Cell:\\#ffffff " .. destination[6] .. "\n"
-	msg = msg .. "\t" .. colorSlate .. "Timer: \\#ffffff" .. self.timerOptions[timer][1] .. "\n\n"
+	local msg = colorCounter .. CreatureObject(pMobileCreator):getFirstName() .. colorWhite .. " - " .. colorEmphasis .. "Event Shuttle " .. colorCounter .. "#" .. npcIndex .. "\n"
+	msg = msg .. "\t" .. colorSlate .. "Event Shuttle Name: " .. colorWhite .. npcName .. "\n"
+	msg = msg .. "\t" .. colorSlate .. "Location: " .. colorWhite .. npcLocation[1] .. ", " .. colorSlate .. "X:" .. colorWhite .. npcLocation[2] .. ", " .. colorSlate .. "Y:" .. colorWhite .. npcLocation[4] .. ", " .. colorSlate .. "Z:" .. colorWhite .. npcLocation[3] .. ", " .. colorSlate .. "Rot:" .. colorWhite .. npcLocation[5] .. ", " .. colorSlate .. "Cell:" .. colorWhite .. npcLocation[6] .. "\n"
+	msg = msg .. "\t" .. colorSlate .. "Destination: " .. colorWhite .. destination[1] .. ", " .. colorSlate .. "X:" .. colorWhite .. destination[2] .. ", " .. colorSlate .. "Y:" .. colorWhite .. destination[4] .. ", " .. colorSlate .. "Z:" .. colorWhite .. destination[3] .. ", " .. colorSlate .. "Cell:" .. colorWhite .. destination[6] .. "\n"
+	msg = msg .. "\t" .. colorSlate .. "Timer: " .. colorWhite .. self.timerOptions[timer][1] .. "\n\n"
 	return msg
 end
 
@@ -606,7 +607,7 @@ function eventShuttleNpcScreenplay:getAllTeleportNPCsCallback(pPlayer, pSui, eve
 		return
 	end
 
-	local sui = SuiMessageBox.new(self.scriptName, "deleteAllTeleportNpcsCallback")
+	local sui = SuiMessageBox.new(self.screenplayName, "deleteAllTeleportNpcsCallback")
 	sui.setTitle(self.windowPrefix .. " Delete All")
 	sui.setPrompt(colorGrey .. "Are you sure that you want to " .. colorRedWarn .. "permanently delete" .. colorGrey .. " every Event Shuttle for all staff?\n\nThere is no undo.")
 	
@@ -665,7 +666,7 @@ function eventShuttleNpcScreenplay:deleteAllTeleportNpcsCallback(pPlayer, pSui, 
 			self:resetTeleportNpc(pMobileCreator, mobileCreatorID, npcIndex)
 		end
 	end
-	CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] \\#ffffffAll Event Shuttles have been deleted")
+	CreatureObject(pPlayer):sendSystemMessage(colorSysNotice .. "[NOTICE] " .. colorWhite .. "All Event Shuttles have been deleted")
 end
 
 function eventShuttleNpcScreenplay:storeMobileID(pMobile)
