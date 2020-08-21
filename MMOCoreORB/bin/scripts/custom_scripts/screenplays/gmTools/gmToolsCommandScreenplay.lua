@@ -110,7 +110,7 @@ function gmToolsCommandScreenplay:openSubWindow(pPlayer, selectedOption)
 	table.sort(sortedOptions)
 	
 	for k,v in ipairs(sortedOptions) do
-		sui.add(selectedOption.options[v].func, v)
+		sui.add(selectedOption.options[v].name, v)
 	end
 	sui.sendTo(pPlayer)
 end
