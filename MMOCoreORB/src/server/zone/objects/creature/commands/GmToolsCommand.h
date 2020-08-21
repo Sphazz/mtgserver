@@ -76,7 +76,6 @@ public:
 				tokenizer.getStringToken(commandOption);
 
 				if (!commandOption.isEmpty()) {
-					System::out << commandOption << endl;
 					LuaObject optionObject = menuOption.getObjectField("options");
 
 					// If options aren't defined, something went wrong, die horribly. (but softly)
@@ -114,7 +113,7 @@ public:
 
 		// Make sure things are set. It'd be weird if they weren't.
 		if (creature == nullptr || optionScreenplay.isEmpty() || optionFunction.isEmpty()) {
-			error("Failed to run screenplay:" + optionScreenplay + " function:" + optionFunction);
+			error("Failed to run screenplay: [" + optionScreenplay + "] function: [" + optionFunction + "]");
 			return checkFailReason(GENERALERROR, creature, lua);
 		}
 		
@@ -150,14 +149,23 @@ public:
 
 	// This is gross, return errors, delete lua. Don't judge me.
 	int checkFailReason(int reason, CreatureObject* creature, Lua* lua) const {
-		if (reason == GENERALERROR) {
-			creature->sendSystemMessage(" \\#ff4444[GmToolsCommand]\\#ffffff The command has failed critically. You should report this to someone...");
-		} else if (reason == INVALIDPARAMETERS) {
-			creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff Invalid argument. Following commands are valid:\n" + getCommandSyntax(creature, lua));
-		} else if (reason == INVALIDSYNTAX) {
-			creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff There is no function which matches your entry.");
-		} else if (reason == INSUFFICIENTPERMISSION) {
-			creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff You lack the permissions to use this function.");
+		if (creature != nullptr) {
+			switch (reason) {
+				case GENERALERROR:
+					creature->sendSystemMessage(" \\#ff4444[GmToolsCommand]\\#ffffff The command has failed critically. You should report this to someone...");
+					break;
+				case INVALIDPARAMETERS:
+					creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff Invalid argument. Following commands are valid:\n" + getCommandSyntax(creature, lua));
+					break;
+				case INVALIDSYNTAX:
+					creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff There is no function which matches your entry.");
+					break;
+				case INSUFFICIENTPERMISSION:
+					creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff You lack the permissions to use this function.");
+					break;
+				default:
+					break;
+			}
 		}
 
 		delete lua;
