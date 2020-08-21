@@ -1,0 +1,1 @@
+includeFile("../custom_scripts/mobile/event/event_shuttle/event_shuttle_npc_neutral.lua")

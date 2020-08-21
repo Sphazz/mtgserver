@@ -33,11 +33,11 @@ gmToolsMenuOptions = {
 		callback = "eventWindowCallback",
 		perms = {15, 14, 13},
 		options = {
-			testEvent01 = {
-				name = "testEvent01",
-				screen = "gmToolsCommandScreenplay", 
+			eventShuttle = {
+				name = "Event Shuttle",
+				screen = "eventShuttleNpcScreenplay", 
 				func = "openEventTeleportNPCWindow",
-				perms = {15, 14, 13},
+				perms = {15, 14, 13, 12, 11, 10},
 			},
 			testEvent02 = {
 				name = "testEvent02",
