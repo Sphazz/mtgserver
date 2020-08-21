@@ -39,11 +39,11 @@ gmToolsMenuOptions = {
 				func = "openEventTeleportNPCWindow",
 				perms = {15, 14, 13, 12, 11, 10},
 			},
-			testEvent02 = {
-				name = "testEvent02",
-				screen = "gmToolsCommandScreenplay", 
-				func = "testEvent02",
-				perms = {15, 14, 13},
+			eventDungeon = {
+				name = "Event Dungeon",
+				screen = "eventDungeonScreenplay", 
+				func = "openEventDungeonInitialWindow",
+				perms = {15, 14, 13, 12, 11, 10},
 			},
 		},
 	},
@@ -59,13 +59,7 @@ gmToolsMenuOptions = {
 				screen = "devToolsGeneralScreenplay", 
 				func = "reloadScreenplays",
 				perms = {15, 14},
-			},
-			testDev02 = {
-				name = "testDev02",
-				screen = "gmToolsCommandScreenplay", 
-				func = "testDev02",
-				perms = {15, 14, 13},
-			},
-		},
+			}
+		}
 	}
 }
