@@ -29,7 +29,7 @@ function eventShuttleNpcScreenplay:openEventTeleportNPCWindow(pPlayer)
 	local sui = SuiListBox.new(self.scriptName, "teleportNpcMainCallback")
 	sui.setTargetNetworkId(0)
 	sui.setTitle(self.windowPrefix .. " Main Menu")
-	local message = colorGrey .. "Choose an Event Shuttle to \\#pcontrast3 Setup " .. colorGrey .. "or " .. colorEmphasis .. "Manage.\n\n"
+	local message = colorGrey .. "Choose an Event Shuttle to" .. colorFail .. " [Setup]" .. colorGrey .. " or " .. colorSuccess .. "[Manage]" .. colorGrey .. ".\n\n"
 	message = message .. colorGrey .. "You may have up to " .. colorCounter .. self.maxNpcs .. colorGrey .. " active Event Shuttles. You can move around and change planets with Event Shuttle window open. The window will save your input, so you may also close it to resume progress later without spawning an Event Shuttle.\n\nSelect a slot and choose an option. To Spawn an Event Shuttle, you must set an " .. colorEmphasis .. "Event Shuttle Location" .. colorGrey .. ", " .. colorEmphasis .. "Destination" .. colorGrey .. " and " .. colorEmphasis .. "Despawn Timer" .. colorGrey .. ". The Event Shuttle Location or Destination will set the location at your current location.\n\nAdditionally, you may choose to set a custom " .. colorGrey .. "Name " .. colorGrey .. "for the Event Shuttle."
 	sui.setPrompt(message)
 
