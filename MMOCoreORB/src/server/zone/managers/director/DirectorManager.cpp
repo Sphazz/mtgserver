@@ -433,6 +433,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 
 	// Custom
 	luaEngine->registerFunction("getAdminLevel", getAdminLevel);
+	luaEngine->registerFunction("reloadScreenplaysLua", reloadScreenplaysLua);
 
 	//Navigation Mesh Management
 	luaEngine->registerFunction("createNavMesh", createNavMesh);
@@ -3688,7 +3689,10 @@ int DirectorManager::getBadgeListByType(lua_State* L) {
 	return 1;
 }
 
-// Custom - Credit TheTinyPebble?
+// Custom 
+
+// Credit: TheTinyPebble?
+// Get the player's character level
 int DirectorManager::getAdminLevel(lua_State* L) {
 	SceneObject* player = (SceneObject*) lua_touserdata(L, -1);
 
@@ -3710,6 +3714,36 @@ int DirectorManager::getAdminLevel(lua_State* L) {
 		lua_pushinteger(L, adminLevel);
 	else
 		lua_pushnil(L);
+
+	return 1;
+}
+
+// Made by Tyclo (https://github.com/Sphazz): 2020/08/21
+// Reload Screenplays via lua. This should NEVER be run outside of a dev/test environment.
+int DirectorManager::reloadScreenplaysLua(lua_State* L) {
+	CreatureObject* creature = (CreatureObject*)lua_touserdata(L, -1);
+
+	if (creature == nullptr) {
+		DirectorManager::instance()->error("Invalid player attempted to reload screenplays.");
+		return 0;
+	}
+
+	PlayerObject* ghost = creature->getPlayerObject();
+
+	if (!ghost->isAdmin()) {
+		DirectorManager::instance()->error("Player with invalid permissions attempted to reload screenplays.");
+		return 0;
+	}
+
+	// Require character builders to be enabled to stop staff from accidentally running this on live server.
+	if (!ConfigManager::instance()->getCharacterBuilderEnabled()) {
+		creature->sendSystemMessage(" \\#ff4444[GmToolsCommand]\\#ffffff Character Builders must be enabled to use this command.");
+		return 0;
+	}
+
+	DirectorManager::instance()->reloadScreenPlays();
+
+	creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff Successfully reloaded \\#ffe254" + String::valueOf(instance()->screenPlays.size()) + "\\#ffffff screenplays.");
 
 	return 1;
 }

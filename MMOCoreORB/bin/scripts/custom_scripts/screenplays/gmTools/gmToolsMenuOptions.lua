@@ -54,11 +54,11 @@ gmToolsMenuOptions = {
 		callback = "devWindowCallback",
 		perms = {15, 14, 13},
 		options = {
-			testDev01 = {
-				name = "testDev01",
-				screen = "gmToolsCommandScreenplay", 
-				func = "testDev01",
-				perms = {15, 14, 13},
+			reloadScreenplays = {
+				name = "Reload Screenplays",
+				screen = "devToolsGeneralScreenplay", 
+				func = "reloadScreenplays",
+				perms = {15, 14},
 			},
 			testDev02 = {
 				name = "testDev02",
