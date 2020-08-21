@@ -21,6 +21,7 @@ admin_general_admin_01 = {
 	jediStateRequired = 0,
 	skillAbility = {},
 	commands = {
+		"gmTools",
 		"teleport",
 		"teleportto",
 		"invulnerable",
