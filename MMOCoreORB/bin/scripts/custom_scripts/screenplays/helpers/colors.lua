@@ -10,7 +10,7 @@ colorEmphasis = "\\#fff1bc" -- Emphasis or interactable object (Light Orange)
 
 colorGreenCnf = "\\#47ef77" -- Confirming an action to be true (Green)
 colorTealCnf = "\\#41f4d9" -- Confirmed option (Teal)
-colorImportant = "\\cef46e" -- Major emphasis of UI Element (Greenish hue)
+colorImportant = "\\#cef46e" -- Major emphasis of UI Element (Greenish hue)
 
 colorOrangeDeny = "\\#ff982b" -- Action cannot be completed (Dark Orange)
 colorRedWarn = "\\#ff4444" -- Warning of major action with consequences (Red)
