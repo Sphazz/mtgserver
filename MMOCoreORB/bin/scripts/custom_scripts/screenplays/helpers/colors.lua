@@ -1,10 +1,11 @@
 -- Prefix with space to show in title
-colorSysNotice = " \\#f6d53b" -- [NOTICE] prefix (Orange)
-colorSysWarning = " \\#ffa500" -- [WARNING] prefix (Red)
+colorSysAttention = " \\#ff4444" -- [ATTENTION] prefix (Red) - Failed
+colorSysWarning = " \\#ffa500" -- [WARNING] prefix (Orange) - Bad, but not terrible
+colorSysNotice = " \\#f6d53b" -- [NOTICE] prefix (Yellow) - Caution/be aware
 
 colorWhite = "\\#ffffff" -- White, this is dumb, but makes it easier to change in mass.
 colorGrey = "\\#eeeeee" -- Basic grey text
-colorMobile = "\\ffd27f" -- Mobile Name (Light Brown)
+colorMobile = "\\#ffd27f" -- Mobile Name (Light Brown)
 colorCounter = "\\#ffe254" -- Numerical value (Light Brown)
 colorEmphasis = "\\#fff1bc" -- Emphasis or interactable object (Light Orange)
 
