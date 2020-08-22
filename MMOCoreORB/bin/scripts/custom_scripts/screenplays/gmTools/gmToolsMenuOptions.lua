@@ -4,34 +4,21 @@ gmToolsMenuOptions = {
 		desc = "Staff tools description.",
 		func = "openStaffWindow",
 		callback = "staffWindowCallback",
-		perms = {15, 14, 13},
+		perms = {15, 14, 13, 12},
 		options = {
-			testStaff01 = {
-				name = "testStaff01",
-				screen = "gmToolsCommandScreenplay", 
-				func = "testStaff01",
-				perms = {15, 14, 13},
-			},
-			testStaff02 = {
-				name = "testStaff02",
-				screen = "gmStaffScreenplay02", 
-				func = "testStaff02",
-				perms = {15, 14, 13},
-			},
-			testStaff03 = {
-				name = "testStaff03",
-				screen = "gmToolsCommandScreenplay", 
-				func = "testStaff03",
-				perms = {15, 14, 13},
-			},
-		},
+			renameTarget = {
+				name = "Rename Target",
+				screen = "staffRenameScreenplay", 
+				func = "openRenameObjectWindow",
+				perms = {15, 14, 13, 12},
+			}
 	},
 	event = {
 		name = "Event Tools",
 		desc = "Event tools description.",
 		func = "openEventWindow",
 		callback = "eventWindowCallback",
-		perms = {15, 14, 13},
+		perms = {15, 14, 13, 12, 11, 10},
 		options = {
 			eventShuttle = {
 				name = "Event Shuttle",
@@ -52,7 +39,7 @@ gmToolsMenuOptions = {
 		desc = "Development tools description.",
 		func = "openDevWindow",
 		callback = "devWindowCallback",
-		perms = {15, 14, 13},
+		perms = {15, 14},
 		options = {
 			reloadScreenplays = {
 				name = "Reload Screenplays",
