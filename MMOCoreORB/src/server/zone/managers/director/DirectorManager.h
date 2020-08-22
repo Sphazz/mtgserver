@@ -198,8 +198,9 @@ namespace server {
 		static int spawnTheaterObject(lua_State* L);
 		static int getSchematicItemName(lua_State* L);
 		static int getBadgeListByType(lua_State* L);
-		static int getAdminLevel(lua_State* L);
-		static int reloadScreenplaysLua(lua_State* L);
+		static int getAdminLevel(lua_State* L); // (Tyclo) 2020 07-31
+		static int reloadScreenplaysLua(lua_State* L); // (Tyclo) 2020 08-21
+		static int logAdminMessage(lua_State* L); // (Tyclo) 2020 08-21
 
 	private:
 		static void setupLuaPackagePath(Lua* luaEngine);

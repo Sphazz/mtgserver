@@ -66,4 +66,9 @@ class ObjectController extends ManagedService implements Logger {
 	@local
 	@read
 	public native void logAdminCommand(SceneObject object, final QueueCommand command, unsigned long targetID, final unicode argumets);
+
+	@local
+	@read
+	public native void logAdminMessage(SceneObject object, final string message);
+
 }

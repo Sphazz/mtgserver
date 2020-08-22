@@ -89,6 +89,7 @@
 #include "server/zone/objects/intangible/TheaterObject.h"
 #include "server/zone/objects/tangible/misc/ContractCrate.h"
 #include "server/zone/managers/crafting/schematicmap/SchematicMap.h"
+#include "server/zone/managers/objectcontroller/ObjectController.h" // (Tyclo) Added for logAdminMessage
 
 int DirectorManager::DEBUG_MODE = 0;
 int DirectorManager::ERROR_CODE = NO_ERROR;
@@ -434,6 +435,7 @@ void DirectorManager::initializeLuaEngine(Lua* luaEngine) {
 	// Custom
 	luaEngine->registerFunction("getAdminLevel", getAdminLevel);
 	luaEngine->registerFunction("reloadScreenplaysLua", reloadScreenplaysLua);
+	luaEngine->registerFunction("logAdminMessage", logAdminMessage);
 
 	//Navigation Mesh Management
 	luaEngine->registerFunction("createNavMesh", createNavMesh);
@@ -3691,7 +3693,7 @@ int DirectorManager::getBadgeListByType(lua_State* L) {
 
 // Custom 
 
-// Credit: TheTinyPebble?
+// Credit: TheTinyPebble?: 2020 07-31 (Added by Tyclo)
 // Get the player's character level
 int DirectorManager::getAdminLevel(lua_State* L) {
 	SceneObject* player = (SceneObject*) lua_touserdata(L, -1);
@@ -3718,7 +3720,7 @@ int DirectorManager::getAdminLevel(lua_State* L) {
 	return 1;
 }
 
-// Made by Tyclo (https://github.com/Sphazz): 2020/08/21
+// Made by Tyclo (https://github.com/Sphazz): 2020 08-21
 // Reload Screenplays via lua. This should NEVER be run outside of a dev/test environment.
 int DirectorManager::reloadScreenplaysLua(lua_State* L) {
 	CreatureObject* creature = (CreatureObject*)lua_touserdata(L, -1);
@@ -3744,6 +3746,24 @@ int DirectorManager::reloadScreenplaysLua(lua_State* L) {
 	DirectorManager::instance()->reloadScreenPlays();
 
 	creature->sendSystemMessage(" \\#f6d53b[GmToolsCommand]\\#ffffff Successfully reloaded \\#ffe254" + String::valueOf(instance()->screenPlays.size()) + "\\#ffffff screenplays.");
+
+	return 1;
+}
+
+// Made by Tyclo (https://github.com/Sphazz): 2020 08-21
+// Log messages directly to the admin log
+int DirectorManager::logAdminMessage(lua_State* L) {
+	SceneObject* player = (SceneObject*) lua_touserdata(L, -2);
+
+	if (player == nullptr || !player->isPlayerCreature()) {
+		DirectorManager::instance()->error("Attempted to log admin message of a non-player object.");
+		return 0;
+	}
+
+	String message = lua_tostring(L, -1);
+
+	ManagedReference<ObjectController*> objectController = player->getZoneServer()->getObjectController();
+	objectController->logAdminMessage(player, message);
 
 	return 1;
 }

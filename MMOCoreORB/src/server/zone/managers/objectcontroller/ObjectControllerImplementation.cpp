@@ -199,3 +199,7 @@ void ObjectControllerImplementation::logAdminCommand(SceneObject* object, const 
 	adminLog.info() << object->getDisplayedName() << " used '/" << queueCommand->getQueueCommandName()
 								<< "' on " << name << " with params '" << arguments.toString() << "'";
 }
+
+void ObjectControllerImplementation::logAdminMessage(SceneObject* object, const String& message) const {
+	adminLog.info() << object->getDisplayedName() << " " << message;
+}
