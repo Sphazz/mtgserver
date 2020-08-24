@@ -11,7 +11,8 @@ gmToolsMenuOptions = {
 				screen = "staffRenameScreenplay", 
 				func = "openRenameObjectWindow",
 				perms = {15, 14, 13, 12},
-			}
+			},
+		},
 	},
 	event = {
 		name = "Event Tools",
@@ -46,7 +47,7 @@ gmToolsMenuOptions = {
 				screen = "devToolsGeneralScreenplay", 
 				func = "reloadScreenplays",
 				perms = {15, 14},
-			}
+			},
 		}
 	}
 }
