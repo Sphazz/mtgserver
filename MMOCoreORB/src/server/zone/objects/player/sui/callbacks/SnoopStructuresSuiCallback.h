@@ -256,7 +256,7 @@ public:
 		ObjectController* controller = player->getZoneServer()->getObjectController();
 		StringBuffer log;
 		log << "(" << player->getObjectID() << ") used '/snoop' to teleport to ";
-		log << structure->getDisplayedName() << " (" << structureID << ") item owned by ";
+		log << structure->getDisplayedName() << " (" << structureID << ") building owned by ";
 		log << target->getFirstName() << " (" << target->getObjectID() << ")";
 		controller->logAdminMessage(player, log.toString());
 	}
@@ -393,7 +393,7 @@ public:
 
 		ObjectController* controller = player->getZoneServer()->getObjectController();
 		StringBuffer message;
-		message << "(" << player->getObjectID() << ") used '/snoop' to transfer ";
+		message << "(" << player->getObjectID() << ") used '/snoop' to retrieve ";
 		message << pObject->getDisplayedName() << " (" << objectID << ") item owned by ";
 		message << target->getFirstName() << " (" << target->getObjectID() << ")";
 		controller->logAdminMessage(player, message.toString());
