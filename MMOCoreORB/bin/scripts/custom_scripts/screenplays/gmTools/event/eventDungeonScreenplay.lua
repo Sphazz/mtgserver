@@ -100,7 +100,7 @@ function eventDungeonScreenplay:cleanUpAbandonedSetup(pPlayer, selectedOption)
 	deleteData("eventDungeon:Step:" .. slot)
 end
 
-function eventDungeonScreenplay:invasionsSetupMenuCallback(pPlayer, pSui, eventIndex, args)
+function eventDungeonScreenplay:eventDungeonSetupMenuCallback(pPlayer, pSui, eventIndex, args)
 	local cancelPressed = (eventIndex == 1)
 
 	if (cancelPressed) then
@@ -114,8 +114,6 @@ function eventDungeonScreenplay:invasionsSetupMenuCallback(pPlayer, pSui, eventI
 	if (pPlayer == nil) then
 		return
 	end
-
-	local playerID = SceneObject(pPlayer):getObjectID()
 
 	local pPageData = LuaSuiBoxPage(pSui):getSuiPageData()
 	if (pPageData == nil) then
@@ -154,7 +152,7 @@ function eventDungeonScreenplay:invasionsSetupMenuCallback(pPlayer, pSui, eventI
 end
 
 function eventDungeonScreenplay:openSetupUIWindow(pPlayer, title, message, options, slot)
-	local sui = SuiListBox.new(self.screenplayName, "invasionsSetupMenuCallback")
+	local sui = SuiListBox.new(self.screenplayName, "eventDungeonSetupMenuCallback")
 	sui.setTargetNetworkId(slot)
 	sui.setTitle(self.windowPrefix .. " " .. title)
 	sui.setPrompt(colorGrey .. "" .. message)
