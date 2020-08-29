@@ -88,6 +88,7 @@ Luna<LuaSceneObject>::RegType LuaSceneObject::Register[] = {
 		{ "info", &LuaSceneObject::info },
 		{ "getPlayersInRange", &LuaSceneObject::getPlayersInRange },
 		{ "isInNavMesh", &LuaSceneObject::isInNavMesh },
+		{ "broadcastObject", &LuaSceneObject::broadcastObject },
 		{ 0, 0 }
 
 };
@@ -848,4 +849,14 @@ int LuaSceneObject::isInNavMesh(lua_State* L) {
 	lua_pushboolean(L, val);
 
 	return 1;
+}
+
+// Added by Tyclo (https://github.com/Sphazz): 2020 08-23
+int LuaSceneObject::broadcastObject(lua_State* L) {
+	bool notifyClient = lua_tonumber(L, -1);
+	SceneObject* obj = (SceneObject*) lua_touserdata(L, -2);
+
+	realObject->broadcastObject(obj, notifyClient);
+
+	return 0;
 }
