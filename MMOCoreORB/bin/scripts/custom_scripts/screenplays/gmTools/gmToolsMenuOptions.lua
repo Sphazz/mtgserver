@@ -6,6 +6,12 @@ gmToolsMenuOptions = {
 		callback = "staffWindowCallback",
 		perms = {15, 14, 13, 12},
 		options = {
+			manageInventory = {
+				name = "Manage Inventory",
+				screen = "staffManagePlayerInventoryScreenplay", 
+				func = "openManageInventoryWindow",
+				perms = {15, 14, 13, 12},
+			},
 			renameTarget = {
 				name = "Rename Target",
 				screen = "staffRenameScreenplay", 
