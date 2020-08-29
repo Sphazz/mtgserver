@@ -14,6 +14,8 @@
 #include "server/zone/managers/auction/AuctionsMap.h"
 #include "server/zone/managers/director/ScreenPlayTask.h"
 
+#include "server/zone/objects/player/sui/callbacks/SnoopStructuresSuiCallback.h" // Added by Tyclo (2020 08-23)
+
 class SnoopCommand : public QueueCommand {
 public:
 
@@ -120,6 +122,8 @@ public:
 			return sendHam(creature, targetObj);
 		} else if (container == "lots") {
 			return sendLots(creature, targetObj);
+		} else if (container == "structures") { // Added by Tyclo (https://github.com/Sphazz): 2020 08-23
+			return sendStructures(creature, targetObj);
 		} else if (container == "vendors") {
 			return sendVendorInfo(creature, targetObj);
 		} else if (container == "veteranrewards") {
@@ -500,6 +504,70 @@ public:
 
 		ghost->addSuiBox(box);
 		creature->sendMessage(box->generateMessage());
+
+		return SUCCESS;
+	}
+
+	// Added by Tyclo (https://github.com/Sphazz): 2020 08-23
+	int sendStructures(CreatureObject* creature, CreatureObject* target) const {
+		ManagedReference<PlayerObject*> targetGhost = target->getPlayerObject();
+		ManagedReference<PlayerObject*> ghost = creature->getPlayerObject();
+
+		if (targetGhost == nullptr || ghost == nullptr)
+			return GENERALERROR;
+
+		StringBuffer message;
+
+		int buildingCount = 0;
+		int baseCount = 0;
+		int civicCount = 0;
+		int harvCount = 0;
+		int factoryCount = 0;
+
+		for (int i = 0; i < targetGhost->getTotalOwnedStructureCount(); i++) {
+			ManagedReference<StructureObject*> structure = target->getZoneServer()->getObject(targetGhost->getOwnedStructure(i)).castTo<StructureObject*>();
+			if (structure->isHarvesterObject() || structure->isGeneratorObject())
+				harvCount++;
+			else if (structure->isFactory())
+				factoryCount++;
+			else if (structure->isGCWBase())
+				baseCount++;
+			else if (structure->isCivicStructure())
+				civicCount++;
+			else
+				buildingCount++;
+		}
+
+		ManagedReference<SuiListBox*> listBox = new SuiListBox(creature, 0, SuiListBox::HANDLETWOBUTTON);
+		if (creature->getParent() != nullptr)
+			listBox->addMenuItem("\\#ffffffSnoop this structure", 5);
+		if (buildingCount > 0)
+			listBox->addMenuItem("\\#ffffffBuildings \\#ffe254(" + String::valueOf(buildingCount) + ")", 1);
+		if (civicCount > 0)
+			listBox->addMenuItem("\\#ffffffCivic Structures \\#ffe254(" + String::valueOf(civicCount) + ")", 2);
+		if (baseCount > 0)
+			listBox->addMenuItem("\\#ffffffGCW Bases \\#ffe254(" + String::valueOf(baseCount) + ")", 3);
+		if (factoryCount > 0)
+			listBox->addMenuItem("\\#ffffffFactories \\#ffe254(" + String::valueOf(factoryCount) + ")", 4);
+
+		message << "\\#cee5e5Player Name:\t\\#ffffff" << target->getDisplayedName() << endl;
+		message << "\\#cee5e5Player ID:\t\t\\#ffe254" << target->getObjectID() << endl;
+		message << "\\#cee5e5Max Lots:\t\t\\#ffe254" << String::valueOf(targetGhost->getMaximumLots()) << endl;
+		message << "\\#cee5e5Unused Lots:\t\\#ffe254" << String::valueOf(targetGhost->getLotsRemaining()) << endl;
+		message << "\\#cee5e5Structures:\t\t\\#ffe254" << String::valueOf(targetGhost->getTotalOwnedStructureCount()) << endl;
+		message << "\\#cee5e5Harvesters:\t\t\\#ffe254" << String::valueOf(harvCount) << " \\#ffffff- (Cannot Snoop)" << endl;
+
+		listBox->setPromptTitle("[Snoop] " + target->getFirstName() + "'s Structures");
+		listBox->setPromptText(message.toString());
+		listBox->setForceCloseDisabled();
+		listBox->setUsingObject(creature);
+		listBox->setOkButton(true, "@ui_shipchoose:select");
+		listBox->setCancelButton(true, "@cancel");
+		listBox->setForceCloseDisabled();
+		listBox->setCallback(new SnoopStructuresSuiCallback(creature->getZoneServer(), target, 1));
+		
+		ghost->addSuiBox(listBox);
+		creature->sendMessage(listBox->generateMessage());
 
 		return SUCCESS;
 	}
