@@ -1,3 +1,9 @@
+-- Written by Tyclo | 2020-08-22
+-- https://github.com/Sphazz
+--[[
+	Give credit to all assets and custom content in your repo and files or don't use this.
+	Pretending to be ignorant doesn't count.
+]]
 staffRenameScreenplay = ScreenPlay:new {
 	screenplayName = "staffRenameScreenplay",
 	maxChar = 120,
